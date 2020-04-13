@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Title: {{ object.title }}</h1>
+
+    <p><strong>Description:</strong> <a href="">{{ object.description }}</a></p>
+    <!-- author detail link not yet defined -->
+    <p><strong>Price:</strong> {{ object.price }}</p>
+    <p><strong>Buy link:</strong> {{ object.buy_link }}</p>
+    <p><strong>Gallery:</strong> {% for photo in object.photo_set.all %} <img src="{{ photo.content.url }}">
+        {{ photo.description }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <form action="{% url "cart:cart_add" object.id %}" method="post">
+        {% csrf_token %}
+        {{ cart_product_form }}
+        <input type="submit" value="add to cart" class="btn btn-primary">
+    </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Your cart</h1>
+
+    {% if object_list %}
+        <ul>
+
+            {% for object in object_list %}
+                <li>
+                    <a href="{{ object.entry.get_absolute_url }}">{{ object.entry.title }}</a> ({{ object.entry.price }}, {{ object.quantity }} штук)
+                </li>
+            {% endfor %}
+
+        </ul>
+    {% else %}
+        <p>You haven't add anything yet. <a href="{% url 'list' %}">Want to see our shop?</a></p>
+    {% endif %}
+{% endblock %}

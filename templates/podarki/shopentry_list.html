@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Shop</h1>
+
+    {% if object_list %}
+        <ul>
+
+            {% for object in object_list %}
+                <li>
+                    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a> ({{ object.price }})
+                </li>
+            {% endfor %}
+
+        </ul>
+    {% else %}
+        <p>There are no item in the shop yet.</p>
+    {% endif %}
+{% endblock %}
