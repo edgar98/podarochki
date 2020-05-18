@@ -8,11 +8,16 @@ class ShopUser(User):
     phone_number = models.CharField(max_length=20)
 
 
+class ShopCategory(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class ShopEntry(models.Model):
     title = models.CharField(max_length=100, help_text='Enter the title')
     description = models.TextField(blank=True, help_text='Description for shop entry')
     price = models.PositiveIntegerField(blank=True, null=True)
-    buy_link = models.CharField(max_length=100, help_text='Link to shop where you can buy it')
+    buy_link = models.CharField(max_length=100, help_text='Link to shop where you can buy it', blank=True, null=True)
+    category = models.ManyToManyField(ShopCategory)
 
     def get_absolute_url(self):
         """

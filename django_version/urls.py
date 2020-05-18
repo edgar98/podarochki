@@ -19,6 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
+from django.views.static import serve
+import os
 
 from podarki.views import RegisterFormView
 
@@ -28,10 +30,33 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', RedirectView.as_view(url='/podarki/', permanent=True)),
     path('podarki/', include('podarki.urls'), name='shop'),
-    path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
+    path('favicon.ico', RedirectView.as_view(url=os.path.join(settings.STATIC_URL, 'favicon.ico'), permanent=True)),
     path('cart/', include('cart.urls')),
-    path('order/', include('orders.urls'), name='orders')
+    path('order/', include('orders.urls'), name='orders'),
+
+    url(r'^static/(?P<path>.*)$', serve,
+        {'document_root': settings.STATIC_ROOT}),
+    url(r'^dmedia/(?P<path>.*)$', serve,
+        {'document_root': settings.MEDIA_ROOT}),
+    url(r'^media/(?P<path>.*)$', serve,
+        {'document_root': os.path.join(settings.VUE_ROOT, 'media')}),
+    url(r'^img/(?P<path>.*)$', serve,
+        {'document_root': os.path.join(settings.VUE_ROOT, 'img')}),
+    url(r'^js/(?P<path>.*)$', serve,
+        {'document_root': os.path.join(settings.VUE_ROOT, 'js')}),
+    url(r'^css/(?P<path>.*)$', serve,
+        {'document_root': os.path.join(settings.VUE_ROOT, 'css')}),
+    url(r'^fonts/(?P<path>.*)$', serve,
+        {'document_root': os.path.join(settings.VUE_ROOT, 'fonts')}),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns = [
+                      url(r'^__debug__/',
+                          include(debug_toolbar.urls)),
+                  ] + urlpatterns
